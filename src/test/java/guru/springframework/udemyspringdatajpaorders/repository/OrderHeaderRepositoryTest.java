@@ -10,6 +10,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ActiveProfiles("local")
 @DataJpaTest
@@ -24,10 +25,14 @@ public class OrderHeaderRepositoryTest {
 
 		OrderHeader orderHeader = new OrderHeader();
 		orderHeader.setCustomer("John Steinbeck");
-		orderHeaderRepository.save(orderHeader);
+		OrderHeader savedOrder = orderHeaderRepository.save(orderHeader);
 		List<OrderHeader> orders = orderHeaderRepository.findAll();
 
 		assertThat(orders.size()).isGreaterThan(0);
-	}
 
+		OrderHeader fetchedOrder = orderHeaderRepository.getReferenceById(savedOrder.getId());
+		assertNotNull(fetchedOrder);
+		assertNotNull(fetchedOrder.getCreatedDate());
+		assertNotNull(fetchedOrder.getLastModifiedDate());
+	}
 }

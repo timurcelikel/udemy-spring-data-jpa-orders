@@ -23,7 +23,7 @@ public class OrderHeaderRepositoryTest {
 	void testOrderHeaderPersists() {
 
 		OrderHeader orderHeader = new OrderHeader();
-		orderHeader.setCustomerName("John Steinbeck");
+		orderHeader.setCustomer("John Steinbeck");
 		orderHeaderRepository.save(orderHeader);
 		List<OrderHeader> orders = orderHeaderRepository.findAll();
 

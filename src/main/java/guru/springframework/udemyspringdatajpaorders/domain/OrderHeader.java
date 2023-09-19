@@ -1,39 +1,82 @@
 package guru.springframework.udemyspringdatajpaorders.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.util.Objects;
 
 @Entity
-public class OrderHeader {
+@AttributeOverrides({
+		@AttributeOverride(
+				name = "shippingAddress.address",
+				column = @Column(name = "shipping_address")
+		),
+		@AttributeOverride(
+				name = "shippingAddress.city",
+				column = @Column(name = "shipping_city")
+		),
+		@AttributeOverride(
+				name = "shippingAddress.state",
+				column = @Column(name = "shipping_state")
+		),
+		@AttributeOverride(
+				name = "shippingAddress.zipCode",
+				column = @Column(name = "shipping_zip_code")
+		),
+		@AttributeOverride(
+				name = "billingAddress.address",
+				column = @Column(name = "billing_address")
+		),
+		@AttributeOverride(
+				name = "billingAddress.city",
+				column = @Column(name = "billing_city")
+		),
+		@AttributeOverride(
+				name = "billingAddress.state",
+				column = @Column(name = "billing_state")
+		),
+		@AttributeOverride(
+				name = "billingAddress.zipCode",
+				column = @Column(name = "billing_zip_code")
+		)
+})
+public class OrderHeader extends BaseEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private String customer;
 
-	private String customerName;
+	@Embedded
+	private Address shippingAddress;
 
-	public Long getId() {
+	@Embedded
+	private Address billingAddress;
 
-		return id;
+	public String getCustomer() {
+
+		return customer;
 	}
 
-	public void setId(final Long id) {
+	public void setCustomer(final String customer) {
 
-		this.id = id;
+		this.customer = customer;
 	}
 
-	public String getCustomerName() {
+	public Address getShippingAddress() {
 
-		return customerName;
+		return shippingAddress;
 	}
 
-	public void setCustomerName(final String customerName) {
+	public void setShippingAddress(final Address shippingAddress) {
 
-		this.customerName = customerName;
+		this.shippingAddress = shippingAddress;
+	}
+
+	public Address getBillingAddress() {
+
+		return billingAddress;
+	}
+
+	public void setBillingAddress(final Address billingAddress) {
+
+		this.billingAddress = billingAddress;
 	}
 
 	@Override
@@ -41,21 +84,25 @@ public class OrderHeader {
 
 		if (this == o)
 			return true;
-		if (o == null || getClass() != o.getClass())
+		if (!(o instanceof final OrderHeader that))
+			return false;
+		if (!super.equals(o))
 			return false;
 
-		final OrderHeader that = (OrderHeader) o;
-
-		if (!Objects.equals(id, that.id))
+		if (!Objects.equals(customer, that.customer))
 			return false;
-		return Objects.equals(customerName, that.customerName);
+		if (!Objects.equals(shippingAddress, that.shippingAddress))
+			return false;
+		return Objects.equals(billingAddress, that.billingAddress);
 	}
 
 	@Override
 	public int hashCode() {
 
-		int result = id != null ? id.hashCode() : 0;
-		result = 31 * result + (customerName != null ? customerName.hashCode() : 0);
+		int result = super.hashCode();
+		result = 31 * result + (customer != null ? customer.hashCode() : 0);
+		result = 31 * result + (shippingAddress != null ? shippingAddress.hashCode() : 0);
+		result = 31 * result + (billingAddress != null ? billingAddress.hashCode() : 0);
 		return result;
 	}
 
@@ -63,8 +110,9 @@ public class OrderHeader {
 	public String toString() {
 
 		return "OrderHeader{" +
-				"id=" + id +
-				", customerName='" + customerName + '\'' +
+				"customer='" + customer + '\'' +
+				", shippingAddress=" + shippingAddress +
+				", billingAddress=" + billingAddress +
 				'}';
 	}
 }

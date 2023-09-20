@@ -1,6 +1,5 @@
 package guru.springframework.udemyspringdatajpaorders.repository;
 
-import guru.springframework.udemyspringdatajpaorders.domain.OrderHeader;
 import guru.springframework.udemyspringdatajpaorders.domain.Product;
 import guru.springframework.udemyspringdatajpaorders.domain.ProductStatus;
 import org.junit.jupiter.api.Test;
@@ -9,9 +8,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.List;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ActiveProfiles("local")
@@ -21,6 +17,14 @@ public class ProductRepositoryTest {
 
 	@Autowired
 	ProductRespository productRespository;
+
+	@Test
+	void testGetCategory() {
+
+		Product product = productRespository.findByDescription("PRODUCT1");
+		assertNotNull(product);
+		assertNotNull(product.getCategories());
+	}
 
 	@Test
 	void tesProductPersists() {

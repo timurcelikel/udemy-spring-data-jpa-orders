@@ -2,6 +2,9 @@ package guru.springframework.udemyspringdatajpaorders.repository;
 
 import guru.springframework.udemyspringdatajpaorders.domain.OrderHeader;
 import guru.springframework.udemyspringdatajpaorders.domain.OrderLine;
+import guru.springframework.udemyspringdatajpaorders.domain.Product;
+import guru.springframework.udemyspringdatajpaorders.domain.ProductStatus;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -23,6 +26,20 @@ public class OrderHeaderRepositoryTest {
 	@Autowired
 	OrderHeaderRepository orderHeaderRepository;
 
+	@Autowired
+	ProductRespository productRespository;
+
+	Product product;
+
+	@BeforeEach
+	void setUp() {
+
+		Product newProduct = new Product();
+		newProduct.setProductStatus(ProductStatus.NEW);
+		newProduct.setDescription("Test Product");
+		product = productRespository.saveAndFlush(newProduct);
+	}
+
 	@Test
 	void testSaveOrderWithLine() {
 
@@ -33,11 +50,15 @@ public class OrderHeaderRepositoryTest {
 		orderLine.setQuantityOrdered(5);
 		orderHeader.setOrderLines(Set.of(orderLine));
 		orderLine.setOrderHeader(orderHeader);
+		orderLine.setProduct(product);
 		OrderHeader savedOrder = orderHeaderRepository.save(orderHeader);
 
 		assertNotNull(savedOrder);
 		assertNotNull(savedOrder.getId());
 		assertEquals(savedOrder.getOrderLines().size(), 1);
+
+		OrderHeader fetchedOrder = orderHeaderRepository.getReferenceById(savedOrder.getId());
+		assertNotNull(fetchedOrder);
 	}
 
 	@Test

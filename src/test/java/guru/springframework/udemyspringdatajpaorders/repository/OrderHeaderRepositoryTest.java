@@ -12,7 +12,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
-import java.util.Set;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -43,14 +42,18 @@ public class OrderHeaderRepositoryTest {
 	@Test
 	void testSaveOrderWithLine() {
 
-		OrderHeader orderHeader = new OrderHeader();
-		orderHeader.setCustomer("New Customer");
-
 		OrderLine orderLine = new OrderLine();
 		orderLine.setQuantityOrdered(5);
-		orderHeader.setOrderLines(Set.of(orderLine));
-		orderLine.setOrderHeader(orderHeader);
 		orderLine.setProduct(product);
+
+		// We no longer do this but instead use our addOrderLine() helper method
+		//orderHeader.setOrderLines(Set.of(orderLine));
+		//orderLine.setOrderHeader(orderHeader);
+
+		OrderHeader orderHeader = new OrderHeader();
+		orderHeader.setCustomer("New Customer");
+		orderHeader.addOrderLine(orderLine);
+
 		OrderHeader savedOrder = orderHeaderRepository.save(orderHeader);
 
 		assertNotNull(savedOrder);

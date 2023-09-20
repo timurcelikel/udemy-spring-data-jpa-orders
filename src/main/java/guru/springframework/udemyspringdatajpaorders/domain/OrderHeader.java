@@ -3,6 +3,7 @@ package guru.springframework.udemyspringdatajpaorders.domain;
 import jakarta.persistence.*;
 
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @AttributeOverrides({
@@ -52,6 +53,9 @@ public class OrderHeader extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private OrderStatus orderStatus;
 
+	@OneToMany(mappedBy = "orderHeader", cascade = CascadeType.PERSIST)
+	private Set<OrderLine> orderLines;
+
 	public String getCustomer() {
 
 		return customer;
@@ -92,6 +96,16 @@ public class OrderHeader extends BaseEntity {
 		this.orderStatus = orderStatus;
 	}
 
+	public Set<OrderLine> getOrderLines() {
+
+		return orderLines;
+	}
+
+	public void setOrderLines(final Set<OrderLine> orderLines) {
+
+		this.orderLines = orderLines;
+	}
+
 	@Override
 	public boolean equals(final Object o) {
 
@@ -108,7 +122,9 @@ public class OrderHeader extends BaseEntity {
 			return false;
 		if (!Objects.equals(billingAddress, that.billingAddress))
 			return false;
-		return orderStatus == that.orderStatus;
+		if (orderStatus != that.orderStatus)
+			return false;
+		return Objects.equals(orderLines, that.orderLines);
 	}
 
 	@Override
@@ -119,6 +135,7 @@ public class OrderHeader extends BaseEntity {
 		result = 31 * result + (shippingAddress != null ? shippingAddress.hashCode() : 0);
 		result = 31 * result + (billingAddress != null ? billingAddress.hashCode() : 0);
 		result = 31 * result + (orderStatus != null ? orderStatus.hashCode() : 0);
+		result = 31 * result + (orderLines != null ? orderLines.hashCode() : 0);
 		return result;
 	}
 
@@ -130,6 +147,7 @@ public class OrderHeader extends BaseEntity {
 				", shippingAddress=" + shippingAddress +
 				", billingAddress=" + billingAddress +
 				", orderStatus=" + orderStatus +
+				", orderLines=" + orderLines +
 				'}';
 	}
 }

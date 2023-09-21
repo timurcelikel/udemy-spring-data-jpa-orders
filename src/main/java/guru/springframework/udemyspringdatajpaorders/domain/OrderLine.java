@@ -63,6 +63,7 @@ public class OrderLine extends BaseEntity {
 		return Objects.equals(product, orderLine.product);
 	}
 
+	// Leave off orderheader to get rid of circular dependency
 	@Override
 	public int hashCode() {
 

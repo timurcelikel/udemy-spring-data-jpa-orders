@@ -43,8 +43,6 @@ import java.util.Set;
 })
 public class OrderHeader extends BaseEntity {
 
-	private String customer;
-
 	@Embedded
 	private Address shippingAddress;
 
@@ -57,24 +55,17 @@ public class OrderHeader extends BaseEntity {
 	@OneToMany(mappedBy = "orderHeader", cascade = CascadeType.PERSIST)
 	private Set<OrderLine> orderLines;
 
+	@ManyToOne(cascade = CascadeType.PERSIST)
+	private Customer customer;
+
 	public void addOrderLine(final OrderLine orderLine) {
 
 		if (orderLines == null) {
 			orderLines = new HashSet<>();
 		}
 
-		orderLines.add(orderLine);
 		orderLine.setOrderHeader(this);
-	}
-
-	public String getCustomer() {
-
-		return customer;
-	}
-
-	public void setCustomer(final String customer) {
-
-		this.customer = customer;
+		orderLines.add(orderLine);
 	}
 
 	public Address getShippingAddress() {
@@ -117,6 +108,16 @@ public class OrderHeader extends BaseEntity {
 		this.orderLines = orderLines;
 	}
 
+	public Customer getCustomer() {
+
+		return customer;
+	}
+
+	public void setCustomer(final Customer customer) {
+
+		this.customer = customer;
+	}
+
 	@Override
 	public boolean equals(final Object o) {
 
@@ -127,22 +128,21 @@ public class OrderHeader extends BaseEntity {
 		if (!super.equals(o))
 			return false;
 
-		if (!Objects.equals(customer, that.customer))
-			return false;
 		if (!Objects.equals(shippingAddress, that.shippingAddress))
 			return false;
 		if (!Objects.equals(billingAddress, that.billingAddress))
 			return false;
 		if (orderStatus != that.orderStatus)
 			return false;
-		return Objects.equals(orderLines, that.orderLines);
+		if (!Objects.equals(orderLines, that.orderLines))
+			return false;
+		return Objects.equals(customer, that.customer);
 	}
 
 	@Override
 	public int hashCode() {
 
 		int result = super.hashCode();
-		result = 31 * result + (customer != null ? customer.hashCode() : 0);
 		result = 31 * result + (shippingAddress != null ? shippingAddress.hashCode() : 0);
 		result = 31 * result + (billingAddress != null ? billingAddress.hashCode() : 0);
 		result = 31 * result + (orderStatus != null ? orderStatus.hashCode() : 0);
@@ -154,7 +154,6 @@ public class OrderHeader extends BaseEntity {
 	public String toString() {
 
 		return "OrderHeader{" +
-				"customer='" + customer + '\'' +
 				", shippingAddress=" + shippingAddress +
 				", billingAddress=" + billingAddress +
 				", orderStatus=" + orderStatus +

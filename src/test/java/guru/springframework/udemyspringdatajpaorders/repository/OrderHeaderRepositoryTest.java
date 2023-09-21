@@ -1,9 +1,6 @@
 package guru.springframework.udemyspringdatajpaorders.repository;
 
-import guru.springframework.udemyspringdatajpaorders.domain.OrderHeader;
-import guru.springframework.udemyspringdatajpaorders.domain.OrderLine;
-import guru.springframework.udemyspringdatajpaorders.domain.Product;
-import guru.springframework.udemyspringdatajpaorders.domain.ProductStatus;
+import guru.springframework.udemyspringdatajpaorders.domain.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +25,9 @@ public class OrderHeaderRepositoryTest {
 	@Autowired
 	ProductRespository productRespository;
 
+	@Autowired
+	CustomerRepository customerRepository;
+
 	Product product;
 
 	@BeforeEach
@@ -37,6 +37,18 @@ public class OrderHeaderRepositoryTest {
 		newProduct.setProductStatus(ProductStatus.NEW);
 		newProduct.setDescription("Test Product");
 		product = productRespository.saveAndFlush(newProduct);
+	}
+
+	@Test
+	void testSaveCustomerWithOrders() {
+
+		Customer customer = new Customer();
+		customer.setCustomerName("Customer Contact");
+		OrderHeader oh = new OrderHeader();
+		oh.setCustomer(customer);
+		customer.addOrderHeader(oh);
+		Customer savedCustomer = customerRepository.save(customer);
+		assertNotNull(savedCustomer);
 	}
 
 	@Test
@@ -51,7 +63,9 @@ public class OrderHeaderRepositoryTest {
 		//orderLine.setOrderHeader(orderHeader);
 
 		OrderHeader orderHeader = new OrderHeader();
-		orderHeader.setCustomer("New Customer");
+		Customer customer = new Customer();
+		customer.setCustomerName("New Customer");
+		orderHeader.setCustomer(customer);
 		orderHeader.addOrderLine(orderLine);
 
 		OrderHeader savedOrder = orderHeaderRepository.save(orderHeader);
@@ -68,7 +82,9 @@ public class OrderHeaderRepositoryTest {
 	void testOrderHeaderPersists() {
 
 		OrderHeader orderHeader = new OrderHeader();
-		orderHeader.setCustomer("John Steinbeck");
+		Customer customer = new Customer();
+		customer.setCustomerName("John Steinbeck");
+		orderHeader.setCustomer(customer);
 		OrderHeader savedOrder = orderHeaderRepository.save(orderHeader);
 		List<OrderHeader> orders = orderHeaderRepository.findAll();
 

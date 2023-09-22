@@ -68,6 +68,10 @@ public class OrderHeaderRepositoryTest {
 		orderHeader.setCustomer(customer);
 		orderHeader.addOrderLine(orderLine);
 
+		OrderApproval orderApproval = new OrderApproval();
+		orderApproval.setApprovedBy("me");
+		orderHeader.setOrderApproval(orderApproval);
+
 		OrderHeader savedOrder = orderHeaderRepository.save(orderHeader);
 
 		assertNotNull(savedOrder);
@@ -95,4 +99,5 @@ public class OrderHeaderRepositoryTest {
 		assertNotNull(fetchedOrder.getCreatedDate());
 		assertNotNull(fetchedOrder.getLastModifiedDate());
 	}
+
 }

@@ -52,11 +52,15 @@ public class OrderHeader extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private OrderStatus orderStatus;
 
-	@OneToMany(mappedBy = "orderHeader", cascade = CascadeType.PERSIST)
+	@OneToMany(mappedBy = "orderHeader", cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+	//@OneToMany(mappedBy = "orderHeader", cascade = CascadeType.PERSIST)
 	private Set<OrderLine> orderLines;
 
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	private Customer customer;
+
+	@OneToOne(cascade = CascadeType.PERSIST, orphanRemoval = true)
+	private OrderApproval orderApproval;
 
 	public void addOrderLine(final OrderLine orderLine) {
 
@@ -118,6 +122,16 @@ public class OrderHeader extends BaseEntity {
 		this.customer = customer;
 	}
 
+	public OrderApproval getOrderApproval() {
+
+		return orderApproval;
+	}
+
+	public void setOrderApproval(final OrderApproval orderApproval) {
+
+		this.orderApproval = orderApproval;
+	}
+
 	@Override
 	public boolean equals(final Object o) {
 
@@ -136,9 +150,12 @@ public class OrderHeader extends BaseEntity {
 			return false;
 		if (!Objects.equals(orderLines, that.orderLines))
 			return false;
-		return Objects.equals(customer, that.customer);
+		if (!Objects.equals(customer, that.customer))
+			return false;
+		return Objects.equals(orderApproval, that.orderApproval);
 	}
 
+	// Leave off customer to make sure we don't get circular reference
 	@Override
 	public int hashCode() {
 
@@ -147,17 +164,20 @@ public class OrderHeader extends BaseEntity {
 		result = 31 * result + (billingAddress != null ? billingAddress.hashCode() : 0);
 		result = 31 * result + (orderStatus != null ? orderStatus.hashCode() : 0);
 		result = 31 * result + (orderLines != null ? orderLines.hashCode() : 0);
+		result = 31 * result + (orderApproval != null ? orderApproval.hashCode() : 0);
 		return result;
 	}
 
+	// Leave off customer to make sure we don't get circular reference
 	@Override
 	public String toString() {
 
 		return "OrderHeader{" +
-				", shippingAddress=" + shippingAddress +
+				"shippingAddress=" + shippingAddress +
 				", billingAddress=" + billingAddress +
 				", orderStatus=" + orderStatus +
 				", orderLines=" + orderLines +
+				", orderApproval=" + orderApproval +
 				'}';
 	}
 }

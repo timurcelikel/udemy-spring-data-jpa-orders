@@ -1,11 +1,17 @@
 package guru.springframework.udemyspringdatajpaorders.domain;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 
 import java.util.Objects;
 
 @Entity
 public class OrderApproval extends BaseEntity {
+
+	@OneToOne
+	@JoinColumn(name = "order_header_id")
+	OrderHeader orderHeader;
 
 	private String approvedBy;
 
@@ -19,6 +25,16 @@ public class OrderApproval extends BaseEntity {
 		this.approvedBy = approvedBy;
 	}
 
+	public OrderHeader getOrderHeader() {
+
+		return orderHeader;
+	}
+
+	public void setOrderHeader(final OrderHeader orderHeader) {
+
+		this.orderHeader = orderHeader;
+	}
+
 	@Override
 	public boolean equals(final Object o) {
 
@@ -29,6 +45,8 @@ public class OrderApproval extends BaseEntity {
 		if (!super.equals(o))
 			return false;
 
+		if (!Objects.equals(orderHeader, that.orderHeader))
+			return false;
 		return Objects.equals(approvedBy, that.approvedBy);
 	}
 
@@ -36,6 +54,7 @@ public class OrderApproval extends BaseEntity {
 	public int hashCode() {
 
 		int result = super.hashCode();
+		result = 31 * result + (orderHeader != null ? orderHeader.hashCode() : 0);
 		result = 31 * result + (approvedBy != null ? approvedBy.hashCode() : 0);
 		return result;
 	}
@@ -44,7 +63,8 @@ public class OrderApproval extends BaseEntity {
 	public String toString() {
 
 		return "OrderApproval{" +
-				"approvedBy='" + approvedBy + '\'' +
+				"orderHeader=" + orderHeader +
+				", approvedBy='" + approvedBy + '\'' +
 				'}';
 	}
 }

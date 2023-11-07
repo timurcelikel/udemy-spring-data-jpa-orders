@@ -8,38 +8,38 @@ import java.util.Set;
 
 @Entity
 @AttributeOverrides({
-		@AttributeOverride(
-				name = "shippingAddress.address",
-				column = @Column(name = "shipping_address")
-		),
-		@AttributeOverride(
-				name = "shippingAddress.city",
-				column = @Column(name = "shipping_city")
-		),
-		@AttributeOverride(
-				name = "shippingAddress.state",
-				column = @Column(name = "shipping_state")
-		),
-		@AttributeOverride(
-				name = "shippingAddress.zipCode",
-				column = @Column(name = "shipping_zip_code")
-		),
-		@AttributeOverride(
-				name = "billingAddress.address",
-				column = @Column(name = "billing_address")
-		),
-		@AttributeOverride(
-				name = "billingAddress.city",
-				column = @Column(name = "billing_city")
-		),
-		@AttributeOverride(
-				name = "billingAddress.state",
-				column = @Column(name = "billing_state")
-		),
-		@AttributeOverride(
-				name = "billingAddress.zipCode",
-				column = @Column(name = "billing_zip_code")
-		)
+	@AttributeOverride(
+		name = "shippingAddress.address",
+		column = @Column(name = "shipping_address")
+	),
+	@AttributeOverride(
+		name = "shippingAddress.city",
+		column = @Column(name = "shipping_city")
+	),
+	@AttributeOverride(
+		name = "shippingAddress.state",
+		column = @Column(name = "shipping_state")
+	),
+	@AttributeOverride(
+		name = "shippingAddress.zipCode",
+		column = @Column(name = "shipping_zip_code")
+	),
+	@AttributeOverride(
+		name = "billingAddress.address",
+		column = @Column(name = "billing_address")
+	),
+	@AttributeOverride(
+		name = "billingAddress.city",
+		column = @Column(name = "billing_city")
+	),
+	@AttributeOverride(
+		name = "billingAddress.state",
+		column = @Column(name = "billing_state")
+	),
+	@AttributeOverride(
+		name = "billingAddress.zipCode",
+		column = @Column(name = "billing_zip_code")
+	)
 })
 public class OrderHeader extends BaseEntity {
 
@@ -54,7 +54,7 @@ public class OrderHeader extends BaseEntity {
 
 	@OneToMany(mappedBy = "orderHeader", cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
 	//@OneToMany(mappedBy = "orderHeader", cascade = CascadeType.PERSIST)
-	private Set<OrderLine> orderLines;
+	private Set<OrderLine> orderLines = new HashSet<>();
 
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	private Customer customer;
@@ -174,11 +174,11 @@ public class OrderHeader extends BaseEntity {
 	public String toString() {
 
 		return "OrderHeader{" +
-				"shippingAddress=" + shippingAddress +
-				", billingAddress=" + billingAddress +
-				", orderStatus=" + orderStatus +
-				", orderLines=" + orderLines +
-				", orderApproval=" + orderApproval +
-				'}';
+			"shippingAddress=" + shippingAddress +
+			", billingAddress=" + billingAddress +
+			", orderStatus=" + orderStatus +
+			", orderLines=" + orderLines +
+			", orderApproval=" + orderApproval +
+			'}';
 	}
 }

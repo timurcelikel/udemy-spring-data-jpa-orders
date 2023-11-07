@@ -23,7 +23,7 @@ public class OrderHeaderRepositoryTest {
 	OrderHeaderRepository orderHeaderRepository;
 
 	@Autowired
-	ProductRespository productRespository;
+	ProductRepository productRepository;
 
 	@Autowired
 	CustomerRepository customerRepository;
@@ -36,7 +36,7 @@ public class OrderHeaderRepositoryTest {
 		Product newProduct = new Product();
 		newProduct.setProductStatus(ProductStatus.NEW);
 		newProduct.setDescription("Test Product");
-		product = productRespository.saveAndFlush(newProduct);
+		product = productRepository.saveAndFlush(newProduct);
 	}
 
 	@Test

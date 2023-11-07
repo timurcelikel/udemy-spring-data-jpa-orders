@@ -3,8 +3,10 @@ package guru.springframework.udemyspringdatajpaorders.repository;
 import guru.springframework.udemyspringdatajpaorders.domain.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ProductRespository extends JpaRepository<Product, Long> {
+import java.util.Optional;
 
-	Product findByDescription(final String description);
+public interface ProductRepository extends JpaRepository<Product, Long> {
+
+	Optional<Product> findByDescription(final String description);
 
 }

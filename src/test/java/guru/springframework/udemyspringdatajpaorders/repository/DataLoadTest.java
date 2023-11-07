@@ -50,7 +50,7 @@ class DataLoadTest {
 		orderHeaderRepository.flush();
 	}
 
-	private OrderHeader saveOrder(Customer customer, List<Product> products) {
+	private void saveOrder(Customer customer, List<Product> products) {
 		Random random = new Random();
 
 		OrderHeader orderHeader = new OrderHeader();
@@ -60,10 +60,10 @@ class DataLoadTest {
 			OrderLine orderLine = new OrderLine();
 			orderLine.setProduct(product);
 			orderLine.setQuantityOrdered(random.nextInt(20));
-			orderHeader.getOrderLines().add(orderLine);
+			orderHeader.addOrderLine(orderLine);
 		});
 
-		return orderHeaderRepository.save(orderHeader);
+		orderHeaderRepository.save(orderHeader);
 	}
 
 	private Customer loadCustomers() {

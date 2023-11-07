@@ -53,8 +53,7 @@ public class OrderHeader extends BaseEntity {
 	private OrderStatus orderStatus;
 
 	@OneToMany(mappedBy = "orderHeader", cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
-	//@OneToMany(mappedBy = "orderHeader", cascade = CascadeType.PERSIST)
-	private Set<OrderLine> orderLines = new HashSet<>();
+	private Set<OrderLine> orderLines;
 
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	private Customer customer;
@@ -68,8 +67,8 @@ public class OrderHeader extends BaseEntity {
 			orderLines = new HashSet<>();
 		}
 
-		orderLine.setOrderHeader(this);
 		orderLines.add(orderLine);
+		orderLine.setOrderHeader(this);
 	}
 
 	public Address getShippingAddress() {

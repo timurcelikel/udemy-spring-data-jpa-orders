@@ -50,6 +50,15 @@ class DataLoadTest {
 		orderHeaderRepository.flush();
 	}
 
+	@Test
+	void testLazyVsEager() {
+		// With the default Eager fetch for Customer (ManyToOne) we get a single query with a join
+		//  When changing to a Lazy fetch type we get a separate query for customer from the getCustomer() below
+		OrderHeader orderHeader = orderHeaderRepository.getReferenceById(5L);
+		log.info("Order Id Is: " + orderHeader.getId());
+		log.info("Customer name is: " + orderHeader.getCustomer().getCustomerName());
+	}
+
 	private void saveOrder(Customer customer, List<Product> products) {
 		Random random = new Random();
 

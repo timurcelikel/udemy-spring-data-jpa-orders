@@ -1,6 +1,8 @@
 package guru.springframework.udemyspringdatajpaorders.domain;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -52,14 +54,20 @@ public class OrderHeader extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private OrderStatus orderStatus;
 
-	@OneToMany(mappedBy = "orderHeader", cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+	//@OneToMany(mappedBy = "orderHeader", cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+	@OneToMany(mappedBy = "orderHeader", cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, fetch =
+		FetchType.EAGER)
+	@Fetch(FetchMode.SUBSELECT)
 	private Set<OrderLine> orderLines;
 
 	//@ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	private Customer customer;
 
-	@OneToOne(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "orderHeader")
+	//@OneToOne(cascade = { CascadeType.PERSIST, CascadeType.REMOVE }, mappedBy = "orderHeader")
+	// Somehow removing mappedBy increased our query performance by a ton
+	@OneToOne(cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+	@Fetch(FetchMode.SELECT)
 	private OrderApproval orderApproval;
 
 	public void addOrderLine(final OrderLine orderLine) {

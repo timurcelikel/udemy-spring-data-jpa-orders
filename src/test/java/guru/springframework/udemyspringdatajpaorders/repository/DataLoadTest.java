@@ -1,6 +1,7 @@
 package guru.springframework.udemyspringdatajpaorders.repository;
 
 import guru.springframework.udemyspringdatajpaorders.domain.*;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.ArrayList;
-import java.util.IntSummaryStatistics;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @ActiveProfiles("local")
@@ -42,7 +40,7 @@ class DataLoadTest {
 		List<Product> products = loadProducts();
 		Customer customer = loadCustomers();
 
-		int ordersToCreate = 10000;
+		int ordersToCreate = 1000;
 
 		for (int i = 0; i < ordersToCreate; i++) {
 			log.info("Creating order #: " + i);
@@ -50,6 +48,25 @@ class DataLoadTest {
 		}
 
 		orderHeaderRepository.flush();
+	}
+
+	@Test
+	@Transactional
+	void testDatabaseLock() {
+		Long id = 1L;
+
+		Optional<OrderHeader> orderHeader = orderHeaderRepository.findById(id);
+
+		if (orderHeader.isPresent()) {
+			OrderHeader oh = orderHeader.get();
+			Address billTo = new Address();
+			billTo.setAddress("Bill me");
+			oh.setBillingAddress(billTo);
+			oh.setTestRow("test");
+			orderHeaderRepository.saveAndFlush(oh);
+
+			log.info("I updated the order");
+		}
 	}
 
 	@Test
@@ -64,7 +81,8 @@ class DataLoadTest {
 	@Test
 	void testN_PlusOneProblem() {
 
-		Customer customer = customerRepository.findCustomerByCustomerNameIgnoreCase(TEST_CUSTOMER).get();
+		Customer customer =
+			customerRepository.findCustomerByCustomerNameIgnoreCase(TEST_CUSTOMER).orElse(null);
 
 		IntSummaryStatistics totalOrdered =
 			orderHeaderRepository.findAllByCustomer(customer).stream().flatMap(

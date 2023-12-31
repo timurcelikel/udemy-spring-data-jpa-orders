@@ -1,6 +1,9 @@
 package guru.springframework.udemyspringdatajpaorders.domain;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -8,6 +11,9 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 @MappedSuperclass
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public abstract class BaseEntity {
 
 	@Id
@@ -79,9 +85,9 @@ public abstract class BaseEntity {
 	public String toString() {
 
 		return "BaseEntity{" +
-				"id=" + id +
-				", createdDate=" + createdDate +
-				", lastModifiedDate=" + lastModifiedDate +
-				'}';
+			"id=" + id +
+			", createdDate=" + createdDate +
+			", lastModifiedDate=" + lastModifiedDate +
+			'}';
 	}
 }

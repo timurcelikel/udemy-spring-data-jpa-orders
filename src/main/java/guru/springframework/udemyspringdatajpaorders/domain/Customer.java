@@ -1,14 +1,13 @@
 package guru.springframework.udemyspringdatajpaorders.domain;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
 public class Customer extends BaseEntity {
@@ -21,6 +20,9 @@ public class Customer extends BaseEntity {
 	private String phone;
 
 	private String email;
+
+	@Version
+	private Integer version;
 
 	@OneToMany(mappedBy = "customer", cascade = CascadeType.PERSIST)
 	private Set<OrderHeader> orders = new HashSet<>();

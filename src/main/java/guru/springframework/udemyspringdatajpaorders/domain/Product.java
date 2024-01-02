@@ -13,10 +13,10 @@ public class Product extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private ProductStatus productStatus;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "product_category",
-			joinColumns = @JoinColumn(name = "product_id"),
-			inverseJoinColumns = @JoinColumn(name = "category_id"))
+		joinColumns = @JoinColumn(name = "product_id"),
+		inverseJoinColumns = @JoinColumn(name = "category_id"))
 	private Set<Category> categories;
 
 	public String getDescription() {
@@ -77,8 +77,8 @@ public class Product extends BaseEntity {
 	public String toString() {
 
 		return "Product{" +
-				"description='" + description + '\'' +
-				", productStatus=" + productStatus +
-				'}';
+			"description='" + description + '\'' +
+			", productStatus=" + productStatus +
+			'}';
 	}
 }

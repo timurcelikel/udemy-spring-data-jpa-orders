@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @ActiveProfiles("local")
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class OrderHeaderRepositoryTest {
+class OrderHeaderRepositoryTest {
 
 	@Autowired
 	OrderHeaderRepository orderHeaderRepository;
